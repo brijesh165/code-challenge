@@ -1,48 +1,55 @@
-<div class="container">
-  <div class="panel panel-primary">
-    <div class="panel-heading">Data</div>
-    <div class="panel-body">
-      <div class="container">
-        <jqxGrid #myGrid
-              [width]="'90%'" [columns]="columns"
-              [pageable]="true" [theme]="metro"
-              [pagesizeoptions]="['10', '20', '30']">
-              <tr>
-                   <th>PassengerId</th>
-                   <th>Pclass</th>
-                   <th>Name</th>
-                   <th>Sex</th>
-                   <th>Age</th>
-                   <th>SibSp</th>
-                   <th>Parch</th>
-                   <th>Ticket</th>
-                   <th>Fare</th>
-                   <th>Cabin</th>
-                   <th>Embarked</th>
-              </tr>
-             <tr *ngFor="let titanic of titanicData">
-               <td>{{titanic.PassengerId}}</td>
-               <td>{{titanic.Pclass}}</td>
-               <td>{{titanic.Name}}</td>
-               <td>{{titanic.Sex}}</td>
-               <td>{{titanic.Age}}</td>
-               <td>{{titanic.SibSp}}</td>
-               <td>{{titanic.Parch}}</td>
-               <td>{{titanic.Ticket}}</td>
-               <td>{{titanic.Fare}}</td>
-               <td>{{titanic.Cabin}}</td>
-               <td>{{titanic.Embarked}}</td>
-        </jqxGrid>
-        <div class="container">
+<div class="bgImage">
+  <div class="container">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3>Titanic Data</h3>
+      </div>
+      <div class="panel-body">
+        <div class="container" *ngIf="titanicData.length else elseBlock">
+          <jqxGrid #myGrid
+                [width]="'90%'" [columns]="columns"
+                [pageable]="true" [theme]="metro"
+                [pagesizeoptions]="['10', '20', '30']">
+                <tr>
+                     <th>PassengerId</th>
+                     <th>Pclass</th>
+                     <th>Name</th>
+                     <th>Sex</th>
+                     <th>Age</th>
+                     <th>SibSp</th>
+                     <th>Parch</th>
+                     <th>Ticket</th>
+                     <th>Fare</th>
+                     <th>Cabin</th>
+                     <th>Embarked</th>
+                </tr>
+               <tr *ngFor="let titanic of titanicData">
+                 <td>{{titanic.PassengerId}}</td>
+                 <td>{{titanic.Pclass}}</td>
+                 <td>{{titanic.Name}}</td>
+                 <td>{{titanic.Sex}}</td>
+                 <td>{{titanic.Age}}</td>
+                 <td>{{titanic.SibSp}}</td>
+                 <td>{{titanic.Parch}}</td>
+                 <td>{{titanic.Ticket}}</td>
+                 <td>{{titanic.Fare}}</td>
+                 <td>{{titanic.Cabin}}</td>
+                 <td>{{titanic.Embarked}}</td>
+          </jqxGrid>
+          <br />
           <button class="btn btn-primary"
                   (click)="onChartClick()">
                   {{loadChartComponent ? 'Hide chart' : 'Show chart'}}
           </button>
+          <br />
           <app-chart *ngIf="loadChartComponent"
                 [maleCount]="maleCount"
                 [femaleCount]="femaleCount"
                 (selectedVale)="getSexFromChild($event)"></app-chart>
         </div>
+        <ng-template #elseBlock>
+          <app-spinner></app-spinner>
+        </ng-template>
       </div>
     </div>
   </div>

@@ -21,7 +21,7 @@ export class ChartComponent implements OnInit {
       plotShadow: false
     },
     title : {
-      text: 'Browser market shares at a specific website, 2014'
+      text: 'Titanic Data'
     },
     tooltip : {
       pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -59,6 +59,8 @@ export class ChartComponent implements OnInit {
   }
 
   sendSexToParent(event) {
-    this.selectedVale.emit(event.point.name);
+    if (event.point) {
+      this.selectedVale.emit(event.point.name);
+    }
   }
 }

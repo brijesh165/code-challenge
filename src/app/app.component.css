@@ -1,0 +1,6 @@
+.bgImage {
+  background-image: url("src/app/assets/titanic.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 1000px;
+}

@@ -8,13 +8,15 @@ import { HighchartsChartModule} from 'highcharts-angular';
 import { AppComponent } from './app.component';
 import { ChartComponent } from './chart/chart/chart.component';
 import { DataPipePipe } from './data-pipe.pipe';
+import { SpinnerComponent } from './spinner/spinner/spinner.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     jqxGridComponent,
     ChartComponent,
-    DataPipePipe
+    DataPipePipe,
+    SpinnerComponent,
   ],
   imports: [
     BrowserModule,
