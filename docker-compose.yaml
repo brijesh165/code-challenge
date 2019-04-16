@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+  angular-mongo-db:
+    image: mongo
+    ports:
+      - "27017:27017"
+
+  angular-express-server:
+    build: express-server
+    ports:
+      - "3000:3000"
+    links:
+      - angular-mongo-db
+
+  angular-ang-client:
+    build: angular-app
+    ports:
+      - "4200:4200"
