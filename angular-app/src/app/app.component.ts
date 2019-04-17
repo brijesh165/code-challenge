@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
 import { GetDataService } from './get-data.service';
@@ -20,6 +20,7 @@ export class AppComponent implements OnInit {
   filterBy;
   pageNumber = 1;
   pageSize = 10;
+  loadData = false;
 
   source: any =
     {
@@ -69,31 +70,33 @@ export class AppComponent implements OnInit {
     this.getDataService.getData(pageNum, pageSize)
       .subscribe((data: any) => {
         this.source.localdata = data.message;
+        console.log(this.source.localdata);
       });
   }
 
   ngOnInit(): void {
-    this.getDataFromDatabase(this.pageNumber, this.pageSize);
-
-    this.getDataService.getColumnName()
-      .subscribe((data: any) => {
-        if (!this.columns.length) {
-          for (let i = 0; i < data.columnName.length - 2; i++) {
-            if (data.columnName[i] === 'Name') {
-              this.columns.push({
-                type: data.columnName[i],
-                datafield:  data.columnName[i],
-                width: 300
-              });
-            } else {
-              this.columns.push({
-                type: data.columnName[i],
-                datafield:  data.columnName[i],
-              });
+    if (this.loadData) {
+      this.getDataFromDatabase(this.pageNumber, this.pageSize);
+      this.getDataService.getColumnName()
+        .subscribe((data: any) => {
+          if (!this.columns.length) {
+            for (let i = 0; i < data.columnName.length - 2; i++) {
+              if (data.columnName[i] === 'Name') {
+                this.columns.push({
+                  type: data.columnName[i],
+                  datafield:  data.columnName[i],
+                  width: 300
+                });
+              } else {
+                this.columns.push({
+                  type: data.columnName[i],
+                  datafield:  data.columnName[i],
+                });
+              }
             }
           }
-        }
-      });
+        });
+      }
 
     this.getDataService.getMaleCount()
       .subscribe((data: any) => {
@@ -104,12 +107,17 @@ export class AppComponent implements OnInit {
       .subscribe((data: any) => {
         this.femaleCount = data.dataLength;
       });
+
   }
 
   onLoadData() {
     this.getDataService.putData(this.dataJson)
       .subscribe((data: any) => {
-        console.log(data);
+        console.log('data' + data.status);
+        if (data.status) {
+          this.loadData = !this.loadData;
+          this.ngOnInit();
+        }
       });
   }
 
@@ -121,5 +129,4 @@ export class AppComponent implements OnInit {
     this.filterBy = event;
     this.addfilter();
   }
-
 }

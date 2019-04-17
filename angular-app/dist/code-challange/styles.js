@@ -639,9 +639,9 @@ if(false) {}
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/Brijesh/Desktop/code-challange/src/styles.css */"./src/styles.css");
-__webpack_require__(/*! /Users/Brijesh/Desktop/code-challange/node_modules/bootstrap/dist/css/bootstrap.min.css */"./node_modules/bootstrap/dist/css/bootstrap.min.css");
-module.exports = __webpack_require__(/*! /Users/Brijesh/Desktop/code-challange/node_modules/jqwidgets-scripts/jqwidgets/styles/jqx.base.css */"./node_modules/jqwidgets-scripts/jqwidgets/styles/jqx.base.css");
+__webpack_require__(/*! /Users/Brijesh/Desktop/code-challange/angular-app/src/styles.css */"./src/styles.css");
+__webpack_require__(/*! /Users/Brijesh/Desktop/code-challange/angular-app/node_modules/bootstrap/dist/css/bootstrap.min.css */"./node_modules/bootstrap/dist/css/bootstrap.min.css");
+module.exports = __webpack_require__(/*! /Users/Brijesh/Desktop/code-challange/angular-app/node_modules/jqwidgets-scripts/jqwidgets/styles/jqx.base.css */"./node_modules/jqwidgets-scripts/jqwidgets/styles/jqx.base.css");
 
 
 /***/ })

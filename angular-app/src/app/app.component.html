@@ -7,31 +7,34 @@
       <div class="panel-body">
         <div class="container" style="margin-bottom: 20px">
           <button class="btn btn-primary" id="loadData"
-                  (click)="onLoadData()">Load Data</button>
+                  (click)="onLoadData()">{{loadData ? 'Hide Data' : 'Load Data'}}</button>
         </div>
+        <div *ngIf="loadData">
         <div class="container" *ngIf="source.localdata.length else elseBlock">
-          <jqxGrid #myGrid
-                [width]="'95%'"
-                [source]="dataAdapter"
-                [columns]="columns"
-                [pageable]="true"
-                [autoheight]="true"
-                [theme]="metro"
-                [sortable]="true"
-                [filterable]="true"
-                (onPagechanged)="onPageChanged($event)">
-          </jqxGrid>
-          <br />
-          <button class="btn btn-primary"
-                  (click)="onChartClick()">
-                  {{loadChartComponent ? 'Hide chart' : 'Show chart'}}
-          </button>
-          <br />
-          <app-chart *ngIf="loadChartComponent"
-                [maleCount]="maleCount"
-                [femaleCount]="femaleCount"
-                (selectedVale)="getSexFromChild($event)"></app-chart>
+                  <jqxGrid #myGrid
+                        [width]="'95%'"
+                        [source]="dataAdapter"
+                        [columns]="columns"
+                        [pageable]="true"
+                        [autoheight]="true"
+                        [theme]="metro"
+                        [sortable]="true"
+                        [filterable]="true"
+                        (onPagechanged)="onPageChanged($event)">
+                  </jqxGrid>
+                  <br />
+                  <button class="btn btn-primary"
+                          (click)="onChartClick()">
+                          {{loadChartComponent ? 'Hide chart' : 'Show chart'}}
+                  </button>
+                  <br />
+                  <app-chart *ngIf="loadChartComponent"
+                        [maleCount]="maleCount"
+                        [femaleCount]="femaleCount"
+                        (selectedVale)="getSexFromChild($event)"></app-chart>
+                </div>
         </div>
+
         <ng-template #elseBlock>
           <app-spinner></app-spinner>
         </ng-template>
