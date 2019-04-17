@@ -17,3 +17,4 @@ services:
     build: angular-app
     ports:
       - "4200:4200"
+

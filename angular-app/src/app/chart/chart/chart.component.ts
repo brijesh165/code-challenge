@@ -53,9 +53,8 @@ export class ChartComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.totalCount = this.maleCount + this.femaleCount;
-    this.chartOptions.series[0].data[0][1] = (this.maleCount / this.totalCount) * 100;
-    this.chartOptions.series[0].data[1][1] = (this.femaleCount / this.totalCount) * 100;
+    this.chartOptions.series[0].data[0][1] = this.maleCount;
+    this.chartOptions.series[0].data[1][1] = this.femaleCount;
   }
 
   sendSexToParent(event) {

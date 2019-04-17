@@ -25,12 +25,4 @@ export class GetDataService {
 
     return this.http.get(this.url + 'getData', {headers: header});
   }
-
-  getMaleCount() {
-    return this.http.get(this.url + 'getMaleCount');
-  }
-
-  getFemaleCount() {
-    return this.http.get(this.url + 'getFemaleCount');
-  }
 }

@@ -12,7 +12,7 @@ app.use(cors({
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-mongoose.connect('mongodb://angular-mongo-db:27017/titanicData', { useNewUrlParser: true });
+mongoose.connect('mongodb://localhost:27017/titanicData', { useNewUrlParser: true });
 
 let db = mongoose.connection;
 
@@ -40,7 +40,6 @@ var titanicSchema = new Schema({
 let Titanic = mongoose.model('Titanic', titanicSchema);
 
 app.post('/postData', function(req, res) {
-  console.log(req.body);
   Titanic.deleteMany({}, function (err, data) {
     if(err) {
       console.log(err);
@@ -66,7 +65,6 @@ app.post('/postData', function(req, res) {
 app.get('/getData', (req, res) => {
   const pageNo = parseInt(req.headers.pageno);
   const size = parseInt(req.headers.size);
-  console.log(pageNo + ' ' + size);
   const query = {};
   if (pageNo < 0 || pageNo === 0) {
     response = {"error": true, "message": "invalid page number, should start with 1"}
@@ -77,10 +75,24 @@ app.get('/getData', (req, res) => {
   query.limit = size;
 
   Titanic.find({}, {}, query, function (err, data) {
+    let maleCount = 0;
+    let malePercentage;
+    let femaleCount = 0;
+    let femalePercentage;
+    for (let i=0; i<data.length; i++) {
+      if (data[i].Sex === 'male') {
+        maleCount++;
+      } else {
+        femaleCount++;
+      }
+    }
+    malePercentage = (maleCount / data.length) * 100;
+    femalePercentage = (femaleCount / data.length) * 100;
     if (err) {
       response = {"error": true, "message": "Error fetching data"};
     } else {
-      response = {"error": false, "message": data, "length": 418};
+      response = {"error": false, "message": data, "malePercentage": malePercentage,
+      "femalePercentage": femalePercentage, "length": 418};
     }
     res.json(response);
   });
@@ -94,22 +106,6 @@ app.get('/getColumnName', function(req, res) {
 
   res.send({
     columnName: columnName
-  })
-});
-
-app.get('/getMaleCount', function(req, res) {
-  Titanic.find({'Sex': 'male'}, function(error, data) {
-    res.send({
-      dataLength: data.length
-    })
-  })
-});
-
-app.get('/getFemaleCount', function(req, res) {
-  Titanic.find({'Sex': 'female'}, function(error, data) {
-    res.send({
-      dataLength: data.length
-    })
   })
 });
 

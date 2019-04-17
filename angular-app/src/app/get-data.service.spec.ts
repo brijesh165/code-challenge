@@ -1,7 +1,6 @@
 import {async, inject, TestBed} from '@angular/core/testing';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {HttpClientModule} from '@angular/common/http';
-
 import { GetDataService } from './get-data.service';
 
 
@@ -37,21 +36,12 @@ describe('GetDataService', () => {
     expect(service.getData).toBeTruthy();
   });
 
-  it('should return an observable', async(inject([GetDataService], (service: GetDataService) => {
-    service.getData(1, 10).subscribe((data: any) => {
-      expect(data.length).toBe(10);
-    });
+  it('retrieves data from database', async(inject([GetDataService], (getDataService) => {
+    getDataService.getData().subscribe(result => expect(result.length).toBeGreaterThanOrEqual(10));
   })));
 
-  it('should have getMaleCount function', () => {
-    const service: GetDataService = TestBed.get(GetDataService);
-    expect(service.getMaleCount).toBeTruthy();
-  });
-
-  it('should have getFemaleCount function', () => {
-    const service: GetDataService = TestBed.get(GetDataService);
-    expect(service.getFemaleCount).toBeTruthy();
-  });
-
+  it('retrieves ColumnName from database', async(inject([GetDataService], (getDataService) => {
+    getDataService.getColumnName().subscribe(result => expect(result.length).toBeGreaterThanOrEqual(11));
+  })));
 
 });

@@ -4,6 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import { GetDataService } from './get-data.service';
 import {jqxGridComponent} from 'jqwidgets-scripts/jqwidgets-ts/angular_jqxgrid';
 import sampleJson from 'src/app/assets/data.json';
+import {type} from 'os';
 
 @Component({
   selector: 'app-root',
@@ -15,8 +16,8 @@ export class AppComponent implements OnInit {
   @ViewChild('myGrid') myGrid: jqxGridComponent;
   dataJson: any = sampleJson;
   loadChartComponent = false;
-  maleCount = 0;
-  femaleCount = 0;
+  maleCount;
+  femaleCount;
   filterBy;
   pageNumber = 1;
   pageSize = 10;
@@ -40,10 +41,9 @@ export class AppComponent implements OnInit {
           { name: 'Embarked', type: 'string' },
         ],
       datatype: 'array',
-      pageCount: 0
     };
-  dataAdapter: any = new jqx.dataAdapter(this.source, length, 1000);
   columns: any[] = [];
+  dataAdapter: any = new jqx.dataAdapter(this.source);
 
   addfilter = (): void => {
     const filterGroup = new jqx.filter();
@@ -60,17 +60,22 @@ export class AppComponent implements OnInit {
     let args = event.args;
     let pageNumber = args.pagenum + 1;
     let pageSize = args.pagesize;
+    console.log(pageNumber + ' ' + pageSize);
     this.getDataFromDatabase(pageNumber, pageSize);
+    this.source.localdata.length += 10;
   }
 
   constructor(private getDataService: GetDataService) {}
 
   getDataFromDatabase(pageNum, pageSize) {
-    console.log(pageNum + ' ' + pageSize);
     this.getDataService.getData(pageNum, pageSize)
       .subscribe((data: any) => {
-        this.source.localdata = data.message;
-        console.log(this.source.localdata);
+        for (let i = 0; i < data.message.length; i++) {
+          console.log(data.message[i]);
+          this.source.localdata.push(data.message[i]);
+        }
+        this.maleCount = data.malePercentage;
+        this.femaleCount = data.femalePercentage;
       });
   }
 
@@ -97,23 +102,11 @@ export class AppComponent implements OnInit {
           }
         });
       }
-
-    this.getDataService.getMaleCount()
-      .subscribe((data: any) => {
-        this.maleCount = data.dataLength;
-      });
-
-    this.getDataService.getFemaleCount()
-      .subscribe((data: any) => {
-        this.femaleCount = data.dataLength;
-      });
-
   }
 
   onLoadData() {
     this.getDataService.putData(this.dataJson)
       .subscribe((data: any) => {
-        console.log('data' + data.status);
         if (data.status) {
           this.loadData = !this.loadData;
           this.ngOnInit();
