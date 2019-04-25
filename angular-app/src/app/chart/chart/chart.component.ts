@@ -14,6 +14,7 @@ export class ChartComponent implements OnInit {
 
   totalCount: number;
 
+  // For Highcharts
   highcharts = Highcharts;
   chartOptions = {
     chart : {
@@ -57,6 +58,7 @@ export class ChartComponent implements OnInit {
     this.chartOptions.series[0].data[1][1] = this.femaleCount;
   }
 
+  // @Output event
   sendSexToParent(event) {
     if (event.point) {
       this.selectedVale.emit(event.point.name);

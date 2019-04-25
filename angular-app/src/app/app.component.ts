@@ -14,6 +14,7 @@ import sampleJson from 'src/app/assets/data.json';
 export class AppComponent implements OnInit {
   @ViewChild('myGrid') myGrid: jqxGridComponent;
 
+  // Variables declaration
   dataJson: any = sampleJson;
   loadChartComponent = false;
   maleCount = 0;
@@ -25,6 +26,7 @@ export class AppComponent implements OnInit {
   pageSize = 20;
   loadData = false;
 
+  // Code for JqxGrid Component
   source: any =
     {
       localdata: [],
@@ -49,6 +51,7 @@ export class AppComponent implements OnInit {
   columns: any[] = [];
   dataAdapter: any = new jqx.dataAdapter(this.source);
 
+  // For Custome Filter
   addfilter = (): void => {
     const filterGroup = new jqx.filter();
     const filterOrOperator = 1;
@@ -60,6 +63,7 @@ export class AppComponent implements OnInit {
     this.myGrid.applyfilters();
   }
 
+  // PageChange Event
   onPageChanged(event: any): void {
     const paginginformation = this.myGrid.getpaginginformation();
     this.pageNumber = parseInt(paginginformation.pagenum + 1);
@@ -70,6 +74,7 @@ export class AppComponent implements OnInit {
   constructor(private getDataService: GetDataService) {
   }
 
+  // Method for getting data from database
   getDataFromDatabase(pageNum, pageSize) {
     this.getDataService.getData(pageNum, pageSize)
       .subscribe((data: any) => {
@@ -110,6 +115,7 @@ export class AppComponent implements OnInit {
       }
   }
 
+  // Method for button click
   onLoadData() {
     this.getDataService.putData(this.dataJson)
       .subscribe((data: any) => {
@@ -120,10 +126,12 @@ export class AppComponent implements OnInit {
       });
   }
 
+  // Conditionally display chart
   onChartClick() {
     this.loadChartComponent = !this.loadChartComponent;
   }
 
+  // Getting value from child component using @Output
   getSexFromChild(event) {
     this.filterBy = event;
     this.addfilter();
