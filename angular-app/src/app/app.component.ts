@@ -1,26 +1,28 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
-import { GetDataService } from './get-data.service';
+import {GetDataService} from './get-data.service';
 import {jqxGridComponent} from 'jqwidgets-scripts/jqwidgets-ts/angular_jqxgrid';
 import sampleJson from 'src/app/assets/data.json';
-import {type} from 'os';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [GetDataService, HttpClient]
+  providers: [GetDataService, HttpClient],
 })
 export class AppComponent implements OnInit {
   @ViewChild('myGrid') myGrid: jqxGridComponent;
+
   dataJson: any = sampleJson;
   loadChartComponent = false;
-  maleCount;
-  femaleCount;
+  maleCount = 0;
+  malePercentage;
+  femaleCount = 0;
+  femalePercentage;
   filterBy;
   pageNumber = 1;
-  pageSize = 10;
+  pageSize = 20;
   loadData = false;
 
   source: any =
@@ -41,6 +43,8 @@ export class AppComponent implements OnInit {
           { name: 'Embarked', type: 'string' },
         ],
       datatype: 'array',
+      root: 'entry',
+      record: 'content'
     };
   columns: any[] = [];
   dataAdapter: any = new jqx.dataAdapter(this.source);
@@ -57,25 +61,27 @@ export class AppComponent implements OnInit {
   }
 
   onPageChanged(event: any): void {
-    let args = event.args;
-    let pageNumber = args.pagenum + 1;
-    let pageSize = args.pagesize;
-    console.log(pageNumber + ' ' + pageSize);
-    this.getDataFromDatabase(pageNumber, pageSize);
-    this.source.localdata.length += 10;
+    const paginginformation = this.myGrid.getpaginginformation();
+    this.pageNumber = parseInt(paginginformation.pagenum + 1);
+    this.pageSize = paginginformation.pagesize;
+    this.getDataFromDatabase(this.pageNumber, this.pageSize);
   }
 
-  constructor(private getDataService: GetDataService) {}
+  constructor(private getDataService: GetDataService) {
+  }
 
   getDataFromDatabase(pageNum, pageSize) {
     this.getDataService.getData(pageNum, pageSize)
       .subscribe((data: any) => {
-        for (let i = 0; i < data.message.length; i++) {
-          console.log(data.message[i]);
-          this.source.localdata.push(data.message[i]);
+        if (data.error === false) {
+          this.source.localdata = data.message;
+          // for (let i = 0; i < data.message.length; i++) {
+          //   this.source.localdata.push(data.message[i]);
+          // }
+          console.log(this.source.localdata);
+          this.maleCount = data.malePercentage;
+          this.femaleCount = data.femalePercentage;
         }
-        this.maleCount = data.malePercentage;
-        this.femaleCount = data.femalePercentage;
       });
   }
 

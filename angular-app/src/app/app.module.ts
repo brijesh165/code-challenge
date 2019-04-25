@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule} from '@angular/common/http';
 import { jqxGridComponent } from 'jqwidgets-scripts/jqwidgets-ts/angular_jqxgrid';
 import { HighchartsChartModule} from 'highcharts-angular';
+import {NgxPaginationModule} from 'ngx-pagination';
 
 import { AppComponent } from './app.component';
 import { ChartComponent } from './chart/chart/chart.component';
@@ -23,6 +24,7 @@ import { SpinnerComponent } from './spinner/spinner/spinner.component';
     HttpClientModule,
     HighchartsChartModule,
     FormsModule,
+    NgxPaginationModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

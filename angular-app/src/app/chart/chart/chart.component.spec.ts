@@ -22,4 +22,26 @@ describe('ChartComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it(`shows the value in an <input>`, () => {
+    fixture = TestBed.createComponent(ChartComponent);
+    fixture.componentInstance.maleCount = 60;
+    fixture.changeDetectorRef.detectChanges();
+    expect(fixture.debugElement.nativeElement.querySelector('input').value).toEqual('60');
+  });
+
+  it(`shows the value in an <input>`, () => {
+    fixture = TestBed.createComponent(ChartComponent);
+    fixture.componentInstance.femaleCount = 40;
+    fixture.changeDetectorRef.detectChanges();
+    expect(fixture.debugElement.nativeElement.querySelector('input').value).toEqual('40');
+  });
+
+  // it('should emit an event', () => {
+  //   let point;
+  //   fixture.componentInstance.sendSexToParent(event)
+  //     .subscribe((value) => point = value);
+  //   expect(point).toBe('male');
+  //   expect(point).toBe('female');
+  // });
 });

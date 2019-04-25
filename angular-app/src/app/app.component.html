@@ -13,13 +13,14 @@
         <div class="container" *ngIf="source.localdata.length else elseBlock">
                   <jqxGrid #myGrid
                         [width]="'95%'"
-                        [source]="dataAdapter"
+                        [source]="source"
                         [columns]="columns"
                         [pageable]="true"
                         [autoheight]="true"
                         [theme]="metro"
                         [sortable]="true"
                         [filterable]="true"
+                        [selectionmode]="'multiplerowsextended'"
                         (onPagechanged)="onPageChanged($event)">
                   </jqxGrid>
                   <br />

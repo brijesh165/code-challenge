@@ -1,5 +1,5 @@
 import {async, inject, TestBed} from '@angular/core/testing';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 import {HttpClientModule} from '@angular/common/http';
 import { GetDataService } from './get-data.service';
 
@@ -15,6 +15,39 @@ describe('GetDataService', () => {
     expect(service).toBeTruthy();
   });
 
+  it('expects service to fetch data',
+      inject([HttpTestingController, GetDataService],
+        (httpMock: HttpTestingController, service: GetDataService) => {
+          service.getData(1, 10).subscribe((data: any) => {
+            expect(data.message.length).toBe(10);
+          });
+
+          const req = httpMock.expectOne('http://localhost:3000/getData');
+          expect(req.request.method).toEqual('GET');
+        }));
+
+  afterEach(inject([HttpTestingController], (httpMock: HttpTestingController) => {
+    httpMock.verify();
+  }));
+
+  it(`should emit 'false' for 404 Ok`, async(inject([HttpTestingController, GetDataService],
+    (service: GetDataService, backend: HttpTestingController) => {
+      service.getData(1, 10).subscribe((next) => {
+        expect(next).toBeFalsy();
+      });
+
+      backend.expectOne('/getData').flush(null, {status: 404});
+    })));
+
+  it(`should emit 'true' for 200 Ok`, async(inject([HttpTestingController, GetDataService],
+    (service: GetDataService, backend: HttpTestingController) => {
+      service.getData(1, 10).subscribe((next) => {
+        expect(next).toBeTruthy();
+      });
+
+      backend.expectOne('/getData').flush(null, {status: 200});
+    })));
+
   it('should have putData function', () => {
     const service: GetDataService = TestBed.get(GetDataService);
     expect(service.putData).toBeTruthy();
@@ -22,7 +55,7 @@ describe('GetDataService', () => {
 
   it('should return an observable', async(inject([GetDataService], (service: GetDataService) => {
     service.putData('abcd').subscribe((data) => {
-      expect(data).toBe('true');
+      expect(data).toBe('observable value');
     });
   })));
 
@@ -35,13 +68,5 @@ describe('GetDataService', () => {
     const service: GetDataService = TestBed.get(GetDataService);
     expect(service.getData).toBeTruthy();
   });
-
-  it('retrieves data from database', async(inject([GetDataService], (getDataService) => {
-    getDataService.getData().subscribe(result => expect(result.length).toBeGreaterThanOrEqual(10));
-  })));
-
-  it('retrieves ColumnName from database', async(inject([GetDataService], (getDataService) => {
-    getDataService.getColumnName().subscribe(result => expect(result.length).toBeGreaterThanOrEqual(11));
-  })));
 
 });
